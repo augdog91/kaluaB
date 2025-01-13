@@ -1,7 +1,7 @@
 /**
  *------
  * BGA framework: Gregory Isabelli & Emmanuel Colin & BoardGameArena
- * kaluab implementation : © <Your name here> <Your email address here>
+ * kaluab implementation : © August Delemeester haphazardeinsteinaugdog@gmail.com
  *
  * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
  * See http://en.boardgamearena.com/#!doc/Studio for more information.
@@ -18,7 +18,9 @@
 define([
     "dojo","dojo/_base/declare",
     "ebg/core/gamegui",
-    "ebg/counter"
+    "ebg/counter",
+    "ebg/stock",
+    "ebg/zone",
 ],
 function (dojo, declare) {
     return declare("bgagame.kaluab", ebg.core.gamegui, {
@@ -28,6 +30,13 @@ function (dojo, declare) {
             // Here, you can init the global variables of your user interface
             // Example:
             // this.myGlobalValue = 0;
+
+        // Zone control        	
+        this.hkboard = new ebg.zone();
+
+        //zone.create( this, 'happyblock_r', 64, 64 );
+        //zone.setPattern( 'verticalfit' );
+        //zone.placeInZone( this.happyblock_r, 1 );
 
         },
         
@@ -48,6 +57,33 @@ function (dojo, declare) {
         {
             console.log( "Starting game setup" );
 
+            document.getElementById('game_play_area').insertAdjacentHTML('beforeend', `
+                <div id="game_board_Wrap">
+                    <div id="board_background">
+                        <div id="hkboard">
+                        </div>
+                    </div>	
+                </div>
+                `);
+
+
+            
+                /* try using stock to manage hk tokens
+            this.hkboard = new ebg.stock();
+            this.hkboard.create( this, $('hktokens'), this.cardwidth, this.cardheight );
+
+            // Specify that there are 10 images per row in the CSS sprite image
+            this.hkboard.image_items_per_row = 10;
+            
+            for( var value=2;value<=10;value++ )
+                {
+                    // Build card type id
+                    var card_type_id = this.getCardUniqueId( value );
+                    this.playerHand.addItemType( card_type_id, card_type_id, 'img/Cube_iso.png', card_type_id );
+                }
+
+            */
+                
             // Example to add a div on the game area
             document.getElementById('game_play_area').insertAdjacentHTML('beforeend', `
                 <div id="player-tables"></div>
@@ -57,14 +93,14 @@ function (dojo, declare) {
             Object.values(gamedatas.players).forEach(player => {
                 // example of setting up players boards
                 this.getPlayerPanelElement(player.id).insertAdjacentHTML('beforeend', `
-                    <div id="player-counter-${player.id}">A player counter</div>
+                    <div id="player-counter-${player.id}">Insert # of prayer, happiness, and cards here?</div>
                 `);
 
                 // example of adding a div for each player
                 document.getElementById('player-tables').insertAdjacentHTML('beforeend', `
                     <div id="player-table-${player.id}">
                         <strong>${player.name}</strong>
-                        <div>Player zone content goes here</div>
+                        <div> Setup player amulets, temples, etc here</div>
                     </div>
                 `);
             });
