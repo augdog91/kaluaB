@@ -31,6 +31,12 @@ function (dojo, declare) {
             // Example:
             // this.myGlobalValue = 0;
 
+            //use for other images to minimize load time?
+            this.dontPreloadImage( 'd6.png' );
+
+
+        
+
         // Zone control        	
         this.hkboard = new ebg.zone();
 
@@ -66,7 +72,9 @@ function (dojo, declare) {
                 </div>
                 `);
 
-
+            //create a prayer counter for each player
+            //var counter = new ebg.counter();
+            //counter.create(pcounter);
             
                 /* try using stock to manage hk tokens
             this.hkboard = new ebg.stock();
@@ -83,7 +91,9 @@ function (dojo, declare) {
                 }
 
             */
-                
+            
+
+
             // Example to add a div on the game area
             document.getElementById('game_play_area').insertAdjacentHTML('beforeend', `
                 <div id="player-tables"></div>
@@ -91,19 +101,31 @@ function (dojo, declare) {
             
             // Setting up player boards
             Object.values(gamedatas.players).forEach(player => {
+
                 // example of setting up players boards
                 this.getPlayerPanelElement(player.id).insertAdjacentHTML('beforeend', `
-                    <div id="player-counter-${player.id}">Insert # of prayer, happiness, and cards here?</div>
+                    <div> Prayer count: <span id = "pc_loc"></span> <br> happiness: <br> cards here?</div>
                 `);
+
+                //rename div pc_loc with appended player id
+                var ptable = ("pc_loc"+player.id);
+                pc_loc.setAttribute("id", ptable);
 
                 // example of adding a div for each player
                 document.getElementById('player-tables').insertAdjacentHTML('beforeend', `
-                    <div id="player-table-${player.id}">
+                    <div id= "player-table-"${player.id} >
                         <strong>${player.name}</strong>
                         <div> Setup player amulets, temples, etc here</div>
                     </div>
                 `);
+                
+                //create counter per player in pc_loc div
+                var counter = new ebg.counter();
+                counter.create( document.getElementById(ptable));
+                counter.setValue(5);
+                
             });
+            
             
             // TODO: Set up your game interface here, according to "gamedatas"
             
@@ -184,16 +206,34 @@ function (dojo, declare) {
                  case 'playerTurn':    
                     const playableCardsIds = args.playableCardsIds; // returned by the argPlayerTurn
 
-                    // Add test action buttons in the action status bar, simulating a card click:
-                    playableCardsIds.forEach(
-                        cardId => this.addActionButton(`actPlayCard${cardId}-btn`, _('Play card with id ${card_id}').replace('${card_id}', cardId), () => this.onCardClick(cardId))
-                    ); 
+                    this.statusBar.addActionButton('Give a Speech');
+                    this.statusBar.addActionButton('Convert Atheist');
+                    this.statusBar.addActionButton('Convert Believer');
+                    this.statusBar.addActionButton('Sacrifice Leader');
+                    //  Add test action buttons in the action status bar, simulating a card click:
+                    // playableCardsIds.forEach(
+                    //     cardId => this.addActionButton(`actPlayCard${cardId}-btn`, _('Play card with id ${card_id}').replace('${card_id}', cardId), () => this.onCardClick(cardId))
+                    //); 
 
                     this.addActionButton('actPass-btn', _('Pass'), () => this.bgaPerformAction("actPass"), null, null, 'gray'); 
                     break;
                 }
             }
         },        
+
+        // How-to for buttons - this.addActionButton is deprecated
+        // this.statusBar.addActionButton(label: string, callback: Function, params: object = { color: 'primary' }): HTMLButtonElement
+        // Parameters:
+        
+        // label: the label to be shown, can be html. If label if used pass traslated string, i.e. _('Yes')
+        // callback: function to call on click, cannot be method name it has to be function
+        // params: object optionally containing one of more of the following:
+        // color: can be primary (default) (blue), secondary (gray), alert (red)
+        // id: is the dom element id to set. If null/undefined, the button will not have an id, but you can still manipulate it by storing the reference to the DOM Element returned by the function
+        // classes: can be a string or an array, so 'disabled blinking' and ['disabled', 'blinking'] are both possible.
+        // destination: the DOM Element to add the button to. If not specified, will add it to the status bar.
+        // title: plain text description of the label. Should be set when the button label is an icon, for accessibility.
+        //https://en.doc.boardgamearena.com/Game_interface_logic:_yourgamename.js?_gl=1*1dt80t1*_ga*OTUxNDIxMTYzLjE2OTY5ODQ4MTc.*_ga_DWXD9R5L7D*MTczNjgyODkzOS4yMjguMS4xNzM2ODMwNzY5LjYwLjAuMA..#Title_bar
 
         ///////////////////////////////////////////////////
         //// Utility methods

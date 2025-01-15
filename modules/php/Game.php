@@ -45,6 +45,8 @@ class Game extends \Table
             "my_second_game_variant" => 101,
         ]);        
 
+
+        
         self::$CARD_TYPES = [
             1 => [
                 "card_name" => clienttranslate('Troll'), // ...
@@ -263,6 +265,19 @@ class Game extends \Table
         $this->reloadPlayersBasicInfos();
 
         // Init global values with their initial values.
+
+        // // Initial family setup?
+        // switch ($this->getGameStateValue('game_length')) {
+        //     default:
+        //         $start_points = 50;
+        //         break;
+        //     case 1:
+        //         $start_points = 75;
+        //         break;
+        //     case 2:
+        //         $start_points = 100;
+        //         break;
+        // }
 
         // Dummy content.
         $this->setGameStateInitialValue("my_first_global_variable", 0);

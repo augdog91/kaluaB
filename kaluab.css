@@ -87,10 +87,11 @@
 	position: absolute;	
 }
 
+/*
 .happyblock_r {
     background-image: url(img/Cube_iso.png);
     background-position: 70% 80%;}
-/*
+
 happyblock {
 	background-image: url(img/Cube_iso.png);
 	width: 640px;
