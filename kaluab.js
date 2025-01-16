@@ -32,7 +32,7 @@ function (dojo, declare) {
             // this.myGlobalValue = 0;
 
             //use for other images to minimize load time?
-            this.dontPreloadImage( 'd6.png' );
+            //this.dontPreloadImage( 'd6.png' );
 
 
         
@@ -48,9 +48,6 @@ function (dojo, declare) {
         
         /*
             setup:
-            
-            This method must set up the game user interface according to current game situation specified
-            in parameters.
             
             The method is called each time the game interface is displayed to a player, ie:
             _ when the game starts
@@ -322,3 +319,16 @@ function (dojo, declare) {
         */
    });             
 });
+
+
+/* getCardInfoByTypeId: function (card_type_id) {
+    for (var key in this.gamedatas.token_types) {
+      if (key.startsWith("card")) {
+        var cardInfo = this.gamedatas.token_types[key];
+        cardInfo.key = key;
+        if (parseInt(cardInfo.t) == parseInt(card_type_id)) {
+          return cardInfo;
+        }
+      }
+    }
+  }, */

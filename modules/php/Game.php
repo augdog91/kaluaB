@@ -6,13 +6,7 @@
  *
  * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
  * See http://en.boardgamearena.com/#!doc/Studio for more information.
- * -----
- *
- * Game.php
- *
- * This is the main file for your game logic.
- *
- * In this PHP file, you are going to defines the rules of the game.
+
  */
 declare(strict_types=1);
 
@@ -25,11 +19,8 @@ class Game extends \Table
     private static array $CARD_TYPES;
 
     /**
-     * Your global variables labels:
-     *
      * Here, you can assign labels to global variables you are using for this game. You can use any number of global
-     * variables with IDs between 10 and 99. If your game has options (variants), you also have to associate here a
-     * label to the corresponding ID in `gameoptions.inc.php`.
+     * variables with IDs between 10 and 99.
      *
      * NOTE: afterward, you can get/set the global variables with `getGameStateValue`, `setGameStateInitialValue` or
      * `setGameStateValue` functions.
@@ -39,10 +30,20 @@ class Game extends \Table
         parent::__construct();
 
         $this->initGameStateLabels([
-            "my_first_global_variable" => 10,
-            "my_second_global_variable" => 11,
-            "my_first_game_variant" => 100,
-            "my_second_game_variant" => 101,
+            
+            "Active_Draw" => 10,
+            "Free_Action" => 20,
+            "Active_Turn" => 30,
+            "Non-active_Turn" => 31,
+            "Card_Effect" => 32,
+            "Continue_Turn" => 33,
+            "Convert" => 40,
+            "Gain_Prayer" => 50,
+            "Eliminate_Players" => 60,
+            "Check_Winner" => 61,
+            "Check_Tie" => 62,
+            "Active_Player_Increment" => 70,
+            "End_Game" => 99,
         ]);        
 
 
@@ -56,6 +57,12 @@ class Game extends \Table
             ],
             // ...
         ];
+
+        //Make two decks: bonus and disaster
+        $this->disasterCards = $this->getNew( "module.common.deck" );
+        $this->disasterCards ->init( "disaster_card" );
+        $this->bonusCards = $this->getNew( "module.common.deck" );
+        $this->bonusCards ->init( "bonus_card" );
     }
 
     /**
@@ -239,6 +246,11 @@ class Game extends \Table
         $gameinfos = $this->getGameinfos();
         $default_colors = $gameinfos['player_colors'];
 
+        //Get # of players
+        $players_nbr = count( $players );
+
+        //setup dice function? Game "Abyss" as example?
+
         foreach ($players as $player_id => $player) {
             // Now you can access both $player_id and $player array
             $query_values[] = vsprintf("('%s', '%s', '%s', '%s', '%s')", [
@@ -266,8 +278,10 @@ class Game extends \Table
 
         // Init global values with their initial values.
 
-        // // Initial family setup?
-        // switch ($this->getGameStateValue('game_length')) {
+        //families on island = $players_nbr*3
+
+        // // Initialize something casewise?
+        // switch ($this->getGameStateValue('$players_nbr')) {
         //     default:
         //         $start_points = 50;
         //         break;
@@ -283,16 +297,11 @@ class Game extends \Table
         $this->setGameStateInitialValue("my_first_global_variable", 0);
 
         // Init game statistics.
-        //
         // NOTE: statistics used in this file must be defined in your `stats.inc.php` file.
-
-        // Dummy content.
-        // $this->initStat("table", "table_teststat1", 0);
-        // $this->initStat("player", "player_teststat1", 0);
 
         // TODO: Setup the initial game situation here.
 
-        // Activate first player once everything has been initialized and ready.
+        // Activate first player
         $this->activeNextPlayer();
     }
 

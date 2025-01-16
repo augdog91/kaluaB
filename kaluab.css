@@ -14,21 +14,13 @@
  */
 
 /*
-    This is the CSS stylesheet of your game User Interface.
     
-    Styles defined on this file will be applied to the HTML elements you define in your
-    HTML template (kaluab_kaluab.tpl), and to HTML elements you create dynamically
     (in kaluab.js).
-    
-    Usually, you are using CSS to:
     
     1°) define the overall layout of your game
         (ex: place the board on the top left, place player's hand beside, place the deck on the right, ...).
 
     2°) create your CSS-sprites:
-        All images of your games should be gathered into a small number of image files. Then, using
-        background-image and background-position CSS properties, you create HTML blocks that can 
-        display these images correctly (see example below).
     
     3°) ... anything else:
         It is really easy to add and remove CSS classes dynamically from your Javascript with
@@ -41,12 +33,6 @@
      Note: on the production platform, this file will be compressed and comments will be removed.
            Consequently, don't hesitate to put as many comments as necessary.
 */
-
-
-/* Note: you must not use any @import directive */
-
-
-/********* You can start writing your CSS below this line: **********/
 
 
 /*
@@ -86,6 +72,25 @@
 	height: 265px;
 	position: absolute;	
 }
+
+
+
+/* 
+Example of sprite from 7 Wonders?
+.player_board_wonder {
+    background-image: url('img/30_30_wooden_cubes.png');
+    width: 330px;
+    height: 30px;
+    background-position: 0px 0px;
+    position: relative;
+} 
+    
+.board_wonder_step_1 {  left: 9.1%; }
+.board_wonder_step_2 {  left: 18.2%; }
+.board_wonder_step_3 {  left: 27.3%; }
+.board_wonder_step_4 {  left: 36.4%; }
+ 
+*/
 
 /*
 .happyblock_r {
