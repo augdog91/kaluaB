@@ -1,19 +1,14 @@
 /**
  *------
  * BGA framework: Gregory Isabelli & Emmanuel Colin & BoardGameArena
- * kaluab implementation : © <Your name here> <Your email address here>
+ * kaluab implementation : © August Delemeester haphazardeinsteinaugdog@gmail.com
  *
  * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
  * See http://en.boardgamearena.com/#!doc/Studio for more information.
  * -----
  *
  * kaluab.css
- *
  * kaluab stylesheet
- *
- */
-
-/*
     
     (in kaluab.js).
     
@@ -73,7 +68,16 @@
 	position: absolute;	
 }
 
-
+/*
+Example from hearts tutorial
+.playertablecard {
+    display: inline-block;
+    position: relative;
+    margin-top: 5px;
+    width: 164px;
+    height: 250px;
+    background-image: url('img/kaluacards_g2_small.png'); /* temp hack to see it
+} */
 
 /* 
 Example of sprite from 7 Wonders?
@@ -89,41 +93,4 @@ Example of sprite from 7 Wonders?
 .board_wonder_step_2 {  left: 18.2%; }
 .board_wonder_step_3 {  left: 27.3%; }
 .board_wonder_step_4 {  left: 36.4%; }
- 
-*/
-
-/*
-.happyblock_r {
-    background-image: url(img/Cube_iso.png);
-    background-position: 70% 80%;}
-
-happyblock {
-	background-image: url(img/Cube_iso.png);
-	width: 640px;
-	height: 64px;
-}
-
-
-happyblock_b {background-position: 10% 20%;}
-
-happyblock_g {background-position: 0% 10%;}
-
-happyblock_y {background-position: 60% 70%;}
-
-happyblock_p {background-position: 80% 90%;}
-
-OR
-
-Example from Cant Stop
-.token {
-    position: absolute;
-    width: 22px;
-    height: 22px;
-    background-image: url( 'img/token.png' );    
-}
-.token_000000, .bhikkhu {  background-position: -88px 0px; }
-.token_ff0000 {  background-position: -66px 0px; }
-.token_008000 {  background-position: -44px 0px; }
-.token_0000ff {  background-position: 0px 0px; }
-.token_ffa500 {  background-position: -22px 0px; }
-/*
+ */

@@ -20,8 +20,9 @@ define([
     "ebg/core/gamegui",
     "ebg/counter",
     "ebg/stock",
-    "ebg/zone",
+    "ebg/zone"
 ],
+
 function (dojo, declare) {
     return declare("bgagame.kaluab", ebg.core.gamegui, {
         constructor: function(){
@@ -33,9 +34,6 @@ function (dojo, declare) {
 
             //use for other images to minimize load time?
             //this.dontPreloadImage( 'd6.png' );
-
-
-        
 
         // Zone control        	
         this.hkboard = new ebg.zone();
@@ -73,27 +71,32 @@ function (dojo, declare) {
             //var counter = new ebg.counter();
             //counter.create(pcounter);
             
-                /* try using stock to manage hk tokens
+            //try using stock to manage hk tokens
             this.hkboard = new ebg.stock();
-            this.hkboard.create( this, $('hktokens'), this.cardwidth, this.cardheight );
+            this.hkboard.create( this, $('hktokens'), this.tokenwidth, this.tokenheight );
 
             // Specify that there are 10 images per row in the CSS sprite image
             this.hkboard.image_items_per_row = 10;
             
-            for( var value=2;value<=10;value++ )
+            //five players
+            for( var color=1;color<=5;color++ )
                 {
-                    // Build card type id
-                    var card_type_id = this.getCardUniqueId( value );
-                    this.playerHand.addItemType( card_type_id, card_type_id, 'img/Cube_iso.png', card_type_id );
+                    // Build token id
+                    var token_id = this.getCardUniqueId( value );
+                    this.hkboard.addItemType( token_id, token_id, 'img/Cube_iso.png', token_id );
                 }
 
-            */
             
-
-
             // Example to add a div on the game area
             document.getElementById('game_play_area').insertAdjacentHTML('beforeend', `
-                <div id="player-tables"></div>
+                <div id="player-tables">
+                <div id="myhand_wrap" class="whiteblock">
+                    <b id="myhand_label">${_('My hand')}</b>
+                    <div id="myhand">
+                        <div class="playertablecard"></div>
+                    </div>
+                </div>
+                </div>
             `);
             
             // Setting up player boards
