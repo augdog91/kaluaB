@@ -15,6 +15,7 @@ It can contains notes, docs, tools, tests, data files, etc...
 -implement sequence for avoiding/doubling global effects (apply card twice?)
 -make family tokens and zone
 -handle php case for "zombie" player: remove families from game?
+-Fill out "States.inc.php"
 -game log data
 -player scores? The column player_score from the player table is automatically loaded into this.scoreCtrl and therefore into the stars location on the player board. This occurs sometime after the game setup() function. However this score must be updated as the game progresses using notifications.
 

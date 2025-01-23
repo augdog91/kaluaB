@@ -2,11 +2,17 @@
 /**
  *------
  * BGA framework: Gregory Isabelli & Emmanuel Colin & BoardGameArena
- * kaluab implementation : © August Delemeester haphazardeinsteinaugdog@gmail.com
+ * kaluab implementation : ©  August Delemeester haphazardeinsteinaugdog@gmail.com
  *
  * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
  * See http://en.boardgamearena.com/#!doc/Studio for more information.
-
+ * -----
+ *
+ * Game.php
+ *
+ * This is the main file for your game logic.
+ *
+ * In this PHP file, you are going to defines the rules of the game.
  */
 declare(strict_types=1);
 
@@ -19,8 +25,11 @@ class Game extends \Table
     private static array $CARD_TYPES;
 
     /**
+     * Your global variables labels:
+     *
      * Here, you can assign labels to global variables you are using for this game. You can use any number of global
-     * variables with IDs between 10 and 99.
+     * variables with IDs between 10 and 99. If your game has options (variants), you also have to associate here a
+     * label to the corresponding ID in `gameoptions.inc.php`.
      *
      * NOTE: afterward, you can get/set the global variables with `getGameStateValue`, `setGameStateInitialValue` or
      * `setGameStateValue` functions.
@@ -30,8 +39,8 @@ class Game extends \Table
         parent::__construct();
 
         $this->initGameStateLabels([
-            
-            "Active_Draw" => 10,
+            "Update_Count" => 10,
+            "Active_Draw" => 11,
             "Free_Action" => 20,
             "Active_Turn" => 30,
             "Non-active_Turn" => 31,
@@ -43,8 +52,10 @@ class Game extends \Table
             "Check_Winner" => 61,
             "Check_Tie" => 62,
             "Active_Player_Increment" => 70,
-            "End_Game" => 99,
+            "End_Game" => 89
         ]);        
+
+
         
         self::$CARD_TYPES = [
             1 => [
@@ -55,8 +66,9 @@ class Game extends \Table
             ],
             // ...
         ];
+    }
 
-/*      //Make two decks: bonus and disaster
+    /*      //Make two decks: bonus and disaster
         $this->disasterCards = $this->getNew( "module.common.deck" );
         $this->disasterCards ->init( "disaster_card" );
         $this->bonusCards = $this->getNew( "module.common.deck" );
@@ -116,6 +128,7 @@ class Game extends \Table
 
     /**
      * Game state arguments, example content.
+     *
      * This method returns some additional information that is very specific to the `playerTurn` game state.
      *
      * @return array
@@ -131,7 +144,10 @@ class Game extends \Table
     }
 
     /**
-     * Compute game progression: return an integer between 0 and 100.
+     * Compute and return the current game progression.
+     *
+     * The number returned must be an integer between 0 and 100.
+     *
      * This method is called each time we are in a game state with the "updateGameProgression" property set to true.
      *
      * @return int
@@ -140,13 +156,14 @@ class Game extends \Table
     public function getGameProgression()
     {
         // TODO: compute and return the game progression
-        //pick player with most families
 
         return 0;
     }
 
     /**
-     * Game state action, example content. The action method of state `nextPlayer` is called everytime the current game state is set to `nextPlayer`.
+     * Game state action, example content.
+     *
+     * The action method of state `nextPlayer` is called everytime the current game state is set to `nextPlayer`.
      */
     public function stNextPlayer(): void {
         // Retrieve the active player ID.
@@ -162,13 +179,43 @@ class Game extends \Table
         $this->gamestate->nextState("nextPlayer");
     }
 
-    /*
-     * Migrate database - You don't have to care about this until your game has been published on BGA. 
+    /**
+     * Migrate database.
+     *
+     * You don't have to care about this until your game has been published on BGA. Once your game is on BGA, this
+     * method is called everytime the system detects a game running with your old database scheme. In this case, if you
+     * change your database scheme, you just have to apply the needed changes in order to update the game database and
+     * allow the game to continue to run with your new version.
+     *
      * @param int $from_version
      * @return void
+     */
+    public function upgradeTableDb($from_version)
+    {
+//       if ($from_version <= 1404301345)
+//       {
+//            // ! important ! Use DBPREFIX_<table_name> for all tables
+//
+//            $sql = "ALTER TABLE DBPREFIX_xxxxxxx ....";
+//            $this->applyDbUpgradeToAllDB( $sql );
+//       }
+//
+//       if ($from_version <= 1405061421)
+//       {
+//            // ! important ! Use DBPREFIX_<table_name> for all tables
+//
+//            $sql = "CREATE TABLE DBPREFIX_xxxxxxx ....";
+//            $this->applyDbUpgradeToAllDB( $sql );
+//       }
+    }
 
+    /*
      * Gather all information about current game situation (visible by the current player).
-     * The method is called each time the game interface is displayed to a player (game starts, game refreshes (F5))
+     *
+     * The method is called each time the game interface is displayed to a player, i.e.:
+     *
+     * - when the game starts
+     * - when a player refreshes the game page (F5)
      */
     protected function getAllDatas()
     {
@@ -209,23 +256,6 @@ class Game extends \Table
         $gameinfos = $this->getGameinfos();
         $default_colors = $gameinfos['player_colors'];
 
-        //Get # of players
-        $players_nbr = count( $players );
-
-/*         //Need to flesh out the decks... example of array below 
-        //Create 1 card of type "1" with type_arg=99,
-        //  and 4 cards of type "2" with type_arg=12,
-        //  and 2 cards of type "3" with type_arg=33
-        $cards = array(
-            array( 'type' => 1, 'type_arg' => 99, 'nbr' => 1 ),
-            array( 'type' => 2, 'type_arg' => 12, 'nbr' => 4 ),
-            array( 'type' => 3, 'type_arg' => 33, 'nbr' => 2 )
-        );
-
-        $this->cards->createCards( $cards, 'deck' ); */
-
-        //setup dice function? Game "Abyss" as example?
-
         foreach ($players as $player_id => $player) {
             // Now you can access both $player_id and $player array
             $query_values[] = vsprintf("('%s', '%s', '%s', '%s', '%s')", [
@@ -253,40 +283,56 @@ class Game extends \Table
 
         // Init global values with their initial values.
 
-        //families on island = $players_nbr*3
+        $this->setGameStateInitialValue("Update_Count", 0);
 
-        // // Initialize something casewise?
-        // switch ($this->getGameStateValue('$players_nbr')) {
+        // // Initial family setup?
+        // switch ($this->getGameStateValue('player_count')) {
         //     default:
-        //         $start_points = 50;
+        //         $hk_families_start = 9;
         //         break;
         //     case 1:
-        //         $start_points = 75;
+        //         $hk_families_start = 12;
         //         break;
         //     case 2:
-        //         $start_points = 100;
+        //         $hk_families_start = 15;
         //         break;
         // }
-
-        // Dummy content.
-        //$this->setGameStateInitialValue("my_first_global_variable", 0);
 
         // Init game statistics.
         // NOTE: statistics used in this file must be defined in your `stats.inc.php` file.
 
+        // Dummy content.
+        // $this->initStat("table", "table_teststat1", 0);
+        // $this->initStat("player", "player_teststat1", 0);
+
         // TODO: Setup the initial game situation here.
 
-        // Activate first player
         $this->activeNextPlayer();
-    }
+        
+/*         //https://en.doc.boardgamearena.com/Main_game_logic:_Game.php
+        // Activate players for card selection once everything has been initialized and ready.
+        function st_MultiPlayerInit() {
+            $this->gamestate->setAllPlayersMultiactive();
+        }
 
+        //make each player inactive once all five cards are selected, then transition to next state
+        function actionBla($args) {
+            $this->checkAction('actionBla');
+            // handle the action using $this->getCurrentPlayerId()
+            $this->gamestate->setPlayerNonMultiactive( $this->getCurrentPlayerId(), 'next');
+        }
+ */
+        }
+ 
     /**
      * This method is called each time it is the turn of a player who has quit the game (= "zombie" player).
      * You can do whatever you want in order to make sure the turn of this player ends appropriately
      * (ex: pass).
      *
-     * called when the player leaves the game. This action is triggered
-     * from the main site so you must _never_ use `getCurrentPlayerId()` or `getCurrentPlayerName()`, otherwise it will fail with a
+     * Important: your zombie code will be called when the player leaves the game. This action is triggered
+     * from the main site and propagated to the gameserver from a server, not from a browser.
+     * As a consequence, there is no current player associated to this action. In your zombieTurn function,
+     * you must _never_ use `getCurrentPlayerId()` or `getCurrentPlayerName()`, otherwise it will fail with a
      * "Not logged" error message.
      *
      * @param array{ type: string, name: string } $state

@@ -15,7 +15,7 @@
  */
 
 /*
-   Game state machine is a tool used to facilitate game developpement by doing common stuff that can be set up
+   Game state machine is a tool used to facilitate game developement by doing common stuff that can be set up
    in a very easy way from this configuration file.
 
    Please check the BGA Studio presentation about game state to understand this, and associated documentation.
@@ -86,6 +86,167 @@ $machinestates = [
         "updateGameProgression" => true,
         "transitions" => ["endGame" => 99, "nextPlayer" => 2]
     ],
+
+/*  From Game.php _Construct
+    "Update_Count" => 10,
+    "Active_Draw" => 11,
+    "Free_Action" => 20,
+    "Active_Turn" => 30,
+    "Non-active_Turn" => 31,
+    "Card_Effect" => 32,
+    "Continue_Turn" => 33,
+    "Convert" => 40,
+    "Gain_Prayer" => 50,
+    "Eliminate_Players" => 60,
+    "Check_Winner" => 61,
+    "Check_Tie" => 62,
+    "Active_Player_Increment" => 70,
+    "End_Game" => 89 */
+
+/* 
+10 => [
+    "name" => "Update_Count",
+    "description" => '',
+    "type" => "game",
+    "action" => "",
+    "args" => "",
+    "possibleactions" => "",
+    "updateGameProgression" => false,
+    "transitions" => ["???" => 0, "???" => 0]
+],
+11 => [
+    "name" => "Active_Draw",
+    "description" => 'Draw a total of five cards.',
+    "type" => "",
+    "action" => "",
+    "args" => "",
+    "possibleactions" => "",
+    "updateGameProgression" => false,
+    "transitions" => ["???" => 0, "???" => 0]
+],
+20 => [
+    "name" => "Free_Action",
+    "description" => '',
+    "type" => "",
+    "action" => "",
+    "args" => "",
+    "possibleactions" => "",
+    "updateGameProgression" => false,
+    "transitions" => ["???" => 0, "???" => 0]
+],
+30 => [
+    "name" => "Active_Turn",
+    "description" => '',
+    "type" => "",
+    "action" => "",
+    "args" => "",
+    "possibleactions" => "",
+    "updateGameProgression" => false,
+    "transitions" => ["???" => 0, "???" => 0]
+],
+31 => [
+    "name" => "Non-active_Turn",
+    "description" => '',
+    "type" => "",
+    "action" => "",
+    "args" => "",
+    "possibleactions" => "",
+    "updateGameProgression" => false,
+    "transitions" => ["???" => 0, "???" => 0]
+],
+32 => [
+    "name" => "Card_Effect",
+    "description" => '',
+    "type" => "",
+    "action" => "",
+    "args" => "",
+    "possibleactions" => "",
+    "updateGameProgression" => false,
+    "transitions" => ["???" => 0, "???" => 0]
+],
+33 => [
+    "name" => "Continue_Turn",
+    "description" => '',
+    "type" => "",
+    "action" => "",
+    "args" => "",
+    "possibleactions" => "",
+    "updateGameProgression" => false,
+    "transitions" => ["???" => 0, "???" => 0]
+],
+
+40 => [
+    "name" => "Convert",
+    "description" => '',
+    "type" => "",
+    "action" => "",
+    "args" => "",
+    "possibleactions" => "",
+    "updateGameProgression" => false,
+    "transitions" => ["???" => 0, "???" => 0]
+],
+50 => [
+    "name" => "Gain_Prayer",
+    "description" => '',
+    "type" => "",
+    "action" => "",
+    "args" => "",
+    "possibleactions" => "",
+    "updateGameProgression" => false,
+    "transitions" => ["???" => 0, "???" => 0]
+],
+60 => [
+    "name" => "Eliminate_Players",
+    "description" => '',
+    "type" => "",
+    "action" => "",
+    "args" => "",
+    "possibleactions" => "",
+    "updateGameProgression" => false,
+    "transitions" => ["???" => 0, "???" => 0]
+],
+61 => [
+    "name" => "Check_Winner",
+    "description" => '',
+    "type" => "",
+    "action" => "",
+    "args" => "",
+    "possibleactions" => "",
+    "updateGameProgression" => false,
+    "transitions" => ["???" => 0, "???" => 0]
+],
+62 => [
+    "name" => "Check_Tie",
+    "description" => '',
+    "type" => "",
+    "action" => "",
+    "args" => "",
+    "possibleactions" => "",
+    "updateGameProgression" => false,
+    "transitions" => ["???" => 0, "???" => 0]
+],
+70 => [
+    "name" => "Active_Player_Increment",
+    "description" => '',
+    "type" => "",
+    "action" => "",
+    "args" => "",
+    "possibleactions" => "",
+    "updateGameProgression" => false,
+    "transitions" => ["???" => 0, "???" => 0]
+],
+89 => [
+    "name" => "End_Game",
+    "description" => '',
+    "type" => "",
+    "action" => "",
+    "args" => "",
+    "possibleactions" => "",
+    "updateGameProgression" => false,
+    "transitions" => ["???" => 0, "???" => 0]
+],
+
+*/
 
     // Final state.
     // Please do not modify (and do not overload action/args methods).

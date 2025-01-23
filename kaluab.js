@@ -20,9 +20,8 @@ define([
     "ebg/core/gamegui",
     "ebg/counter",
     "ebg/stock",
-    "ebg/zone"
+    "ebg/zone",
 ],
-
 function (dojo, declare) {
     return declare("bgagame.kaluab", ebg.core.gamegui, {
         constructor: function(){
@@ -33,7 +32,10 @@ function (dojo, declare) {
             // this.myGlobalValue = 0;
 
             //use for other images to minimize load time?
-            //this.dontPreloadImage( 'd6.png' );
+            this.dontPreloadImage( 'd6.png' );
+
+
+        
 
         // Zone control        	
         this.hkboard = new ebg.zone();
@@ -46,6 +48,9 @@ function (dojo, declare) {
         
         /*
             setup:
+            
+            This method must set up the game user interface according to current game situation specified
+            in parameters.
             
             The method is called each time the game interface is displayed to a player, ie:
             _ when the game starts
@@ -65,6 +70,7 @@ function (dojo, declare) {
                         </div>
                     </div>	
                 </div>
+
                 `);
 
             //create a prayer counter for each player
@@ -72,31 +78,25 @@ function (dojo, declare) {
             //counter.create(pcounter);
             
             //try using stock to manage hk tokens
-            this.hkboard = new ebg.stock();
-            this.hkboard.create( this, $('hktokens'), this.tokenwidth, this.tokenheight );
+            this.hkstock = new ebg.stock();
+            this.hkstock.create( this, $('game_board_Wrap'), 64, 64 );
+            //args = page, div, width, height; change div location later
 
             // Specify that there are 10 images per row in the CSS sprite image
-            this.hkboard.image_items_per_row = 10;
+            this.hkstock.image_items_per_row = 10;
             
             //five players
-            for( var color=1;color<=5;color++ )
+            for( var color=1;color<=11;color++ )
                 {
                     // Build token id
-                    var token_id = this.getCardUniqueId( value );
-                    this.hkboard.addItemType( token_id, token_id, 'img/Cube_iso.png', token_id );
+                    this.hkstock.addItemType( color, color, 'img/Cube_iso.png', color );
+                    //args = id, weight for sorting purpose, URL of our CSS sprite, position of image in the CSS sprite.
                 }
+            this.placeOnObject.
 
-            
             // Example to add a div on the game area
             document.getElementById('game_play_area').insertAdjacentHTML('beforeend', `
-                <div id="player-tables">
-                <div id="myhand_wrap" class="whiteblock">
-                    <b id="myhand_label">${_('My hand')}</b>
-                    <div id="myhand">
-                        <div class="playertablecard"></div>
-                    </div>
-                </div>
-                </div>
+                <div id="player-tables"></div>
             `);
             
             // Setting up player boards
@@ -136,7 +136,6 @@ function (dojo, declare) {
             console.log( "Ending game setup" );
         },
        
-
         ///////////////////////////////////////////////////
         //// Game & client states
         
@@ -322,16 +321,3 @@ function (dojo, declare) {
         */
    });             
 });
-
-
-/* getCardInfoByTypeId: function (card_type_id) {
-    for (var key in this.gamedatas.token_types) {
-      if (key.startsWith("card")) {
-        var cardInfo = this.gamedatas.token_types[key];
-        cardInfo.key = key;
-        if (parseInt(cardInfo.t) == parseInt(card_type_id)) {
-          return cardInfo;
-        }
-      }
-    }
-  }, */
