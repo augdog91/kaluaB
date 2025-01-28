@@ -55,7 +55,11 @@ class Game extends \Table
             "End_Game" => 89
         ]);        
 
-
+        //Make two decks: bonus and disaster
+        $this->disasterCards = $this->getNew( "module.common.deck" );
+        $this->disasterCards ->init( "disaster_card" );
+        $this->bonusCards = $this->getNew( "module.common.deck" );
+        $this->bonusCards ->init( "bonus_card" );
         
         self::$CARD_TYPES = [
             1 => [
@@ -67,13 +71,6 @@ class Game extends \Table
             // ...
         ];
     }
-
-    /*      //Make two decks: bonus and disaster
-        $this->disasterCards = $this->getNew( "module.common.deck" );
-        $this->disasterCards ->init( "disaster_card" );
-        $this->bonusCards = $this->getNew( "module.common.deck" );
-        $this->bonusCards ->init( "bonus_card" );
-    } */
 
     /**
      * Player action, example content.
@@ -297,6 +294,35 @@ class Game extends \Table
         //         $hk_families_start = 15;
         //         break;
         // }
+
+        $disasterCards = array(
+            array( 'type' => 1, 'type_arg' => 1, 'nbr' => 4 ),
+            array( 'type' => 1, 'type_arg' => 2, 'nbr' => 4 ),
+            array( 'type' => 1, 'type_arg' => 3, 'nbr' => 4 ),
+            array( 'type' => 1, 'type_arg' => 4, 'nbr' => 4 ),
+            array( 'type' => 1, 'type_arg' => 5, 'nbr' => 3 ),
+            array( 'type' => 2, 'type_arg' => 6, 'nbr' => 1 ),
+            array( 'type' => 2, 'type_arg' => 7, 'nbr' => 1 ),
+            array( 'type' => 2, 'type_arg' => 8, 'nbr' => 1 ),
+            array( 'type' => 2, 'type_arg' => 9, 'nbr' => 1 ),
+            array( 'type' => 2, 'type_arg' => 10, 'nbr' => 1 ),
+            array( 'type' => 2, 'type_arg' => 11, 'nbr' => 1 ),
+            array( 'type' => 2, 'type_arg' => 12, 'nbr' => 1 ),
+            array( 'type' => 2, 'type_arg' => 13, 'nbr' => 1 ),
+            array( 'type' => 2, 'type_arg' => 14, 'nbr' => 1 ),
+            array( 'type' => 2, 'type_arg' => 15, 'nbr' => 1 )
+        );
+        $this->disasterCards->createCards( $disasterCards, 'd_deck' );
+    
+        $bonusCards = array(
+            array( 'type' => 1, 'type_arg' => 1, 'nbr' => 3 ),
+            array( 'type' => 1, 'type_arg' => 2, 'nbr' => 3 ),
+            array( 'type' => 1, 'type_arg' => 3, 'nbr' => 3 ),
+            array( 'type' => 1, 'type_arg' => 4, 'nbr' => 3 ),
+            array( 'type' => 1, 'type_arg' => 5, 'nbr' => 3 ),
+            array( 'type' => 1, 'type_arg' => 6, 'nbr' => 3 )
+        );
+        $this->bonusCards->createCards( $bonusCards, 'b_deck' );
 
         // Init game statistics.
         // NOTE: statistics used in this file must be defined in your `stats.inc.php` file.
