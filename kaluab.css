@@ -1,7 +1,7 @@
 /**
  *------
  * BGA framework: Gregory Isabelli & Emmanuel Colin & BoardGameArena
- * kaluab implementation : © <Your name here> <Your email address here>
+ * kaluab implementation : © August Delemeester haphazardeinsteinaugdog@gmail.com
  *
  * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
  * See http://en.boardgamearena.com/#!doc/Studio for more information.
@@ -12,60 +12,6 @@
  * kaluab stylesheet
  *
  */
-
-/*
-    This is the CSS stylesheet of your game User Interface.
-    
-    Styles defined on this file will be applied to the HTML elements you define in your
-    HTML template (kaluab_kaluab.tpl), and to HTML elements you create dynamically
-    (in kaluab.js).
-    
-    Usually, you are using CSS to:
-    
-    1°) define the overall layout of your game
-        (ex: place the board on the top left, place player's hand beside, place the deck on the right, ...).
-
-    2°) create your CSS-sprites:
-        All images of your games should be gathered into a small number of image files. Then, using
-        background-image and background-position CSS properties, you create HTML blocks that can 
-        display these images correctly (see example below).
-    
-    3°) ... anything else:
-        It is really easy to add and remove CSS classes dynamically from your Javascript with
-        dojo.addClass and dojo.removeClass. It is also easy to check if an element has a class
-        (dojo.hasClass) or to get all elements with a specific class (dojo.query). This is why,
-        very often, using CSS classes for the logic of your user interface allow you to do complex
-        thing easily.
-        
-        
-     Note: on the production platform, this file will be compressed and comments will be removed.
-           Consequently, don't hesitate to put as many comments as necessary.
-*/
-
-
-/* Note: you must not use any @import directive */
-
-
-/********* You can start writing your CSS below this line: **********/
-
-
-/*
-    Example of CSS sprites (a black token and a white token, 20x20px each, embedded in the same "tokens.png" 40x20px image):
-
-    .white_token {
-        background-image: url('img/tokens.png');
-        background-position: 0px 0px;
-    }
-    .black_token {
-        background-image: url('img/tokens.png');
-        background-position: -20px 0px;
-    }
-    .token {
-        width: 20px;
-        height: 20px;
-        background-repeat: none;
-    }
-*/
 
 #game_board_Wrap {
     display: flex;
@@ -85,8 +31,8 @@
 }
 
 #hkboard {
-    width: 100%;
-    height: 100%;
+    width: 400px; /* Match the width of board_background */
+    height: 265px; /* Match the height of board_background */
     position: relative;
 }
 
@@ -99,13 +45,13 @@
     z-index: 1; /* Ensure hkzone is in front of hkboard */
 }
 
-#player_areas {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    margin-top: 20px;
-    gap: 20px; /* Add gap to avoid overlap */
-    margin-bottom: 20px; /* Ensure there's space between hkboard and player areas */
+#atheistFamiliesZone {
+    position: absolute;
+    top: 64px; /* Positioned below hkzone */
+    left: 0;
+    width: 100%;
+    height: calc(100% - 64px); /* Takes the remaining height of board_background */
+    z-index: 1; /* Ensure atheistFamiliesZone is in front of hkboard */
 }
 
 .player_area {
@@ -113,13 +59,12 @@
     padding: 10px;
     margin: 10px;
     width: 600px;
+    min-height: 450px; /* Adjusted height to fit both player_families and player_cards */
     background-color: #f9f9f9;
     border-radius: 5px;
     text-align: right;
     box-sizing: border-box; /* Ensure padding and border are included in the width */
-    display: flex;
-    flex-direction: column;
-    align-items: right;
+    display: inline-block;
 }
 
 .player_name {
@@ -135,24 +80,25 @@
     border-radius: 5px;
     padding: 5px;
     box-sizing: border-box; /* Ensure padding and border are included in the height */
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: right;
-    align-items: right;
+    display: block;
 }
 
-.hk_token {
+.player_families {
+    min-height: 100px;
+    min-width: 600px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 5px;
+    box-sizing: border-box; /* Ensure padding and border are included in the height */
+    display: block;
+}
+
+.family_item {
     width: 30px;
     height: 30px;
-    background-image: url('img/30_30_wooden_cubes.png');
-    background-size: 300px 30px; /* 10 elements of 30px each */
+    background-image: url('img/30_30_meeple.png');
+    background-size: 30px 30px;
     background-repeat: no-repeat;
 }
 
-/* .disaster_card {
-    width: 200px;
-    height: 290px;
-    background-image: url('img/Cards_Disaster_1000_870.png');
-    background-size: 1000px 870px; /* Assuming 5 cards in a row */
-    background-repeat: no-repeat;
-} */

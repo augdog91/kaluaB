@@ -33,32 +33,78 @@ function (dojo, declare) {
             document.getElementById('game_play_area').insertAdjacentHTML('beforeend', `
                 <div id="board_background">
                     <div id="hkboard"></div>
-                        <div id="player-tables">
-                            <div id="disaster-cards"></div> <!-- Add a div for disaster cards -->
-                        </div>
-                    </div>
+                    <div id="atheistFamiliesZone"></div>
+                </div>
+                <div id="player-tables" class="zone-container"></div>
             `);
+
+            // Define dimensions for hkzone
+            const hkZoneWidth = 64; // Set to desired width
+            const hkZoneHeight = 80; // Set to desired height
+
+            // Define dimensions for atheist families zone
+            const atheistFamiliesZoneWidth = 400 - hkZoneWidth; // Set to desired width
+            const atheistFamiliesZoneHeight = 265 - hkZoneHeight; // Set to desired height
 
             // Zone control
             this.hkzone = new ebg.zone();
-            this.hkzone.create(this, 'hkboard', 64, 64);
+            this.hkzone.create(this, 'hkboard', hkZoneWidth, hkZoneHeight);
+
+            // Zone for atheist families
+            this.atheistFamiliesZone = new ebg.zone();
+            this.atheistFamiliesZone.create(this, 'hkboard', atheistFamiliesZoneWidth, atheistFamiliesZoneHeight);
+            
         },
         
         setup: function(gamedatas) {
             console.log("Starting game setup");
 
+            // Define player hand dimensions
+            const playerHandWidth = 800;
+            const playerHandHeight = 200;
+
             // Create player areas
-            const playerAreas = document.getElementById('game_play_area');
+            const playerAreas = document.getElementById('player-tables');
             Object.values(gamedatas.players).forEach(player => {
                 playerAreas.insertAdjacentHTML('beforeend', `
                     <div id="player_area_${player.id}" class="player_area">
                         <div class="player_name">${player.name}</div>
-                        <div class="player_hand" id="player_hand_${player.id}">Setup player amulets, temples, etc here</div>
+                        <div id="${player.id}_cards" class="player_cards"></div>
+                        <div id="${player.id}_families" class="player_families"></div>
                     </div>
                 `);
+
+                // Create zones for player cards
+                this[`player_${player.id}_cards_zone`] = new ebg.zone();
+                this[`player_${player.id}_cards_zone`].create(this, `${player.id}_cards`, playerHandWidth, playerHandHeight);
+
+                // Create zones for player families
+                this[`player_${player.id}_families_zone`] = new ebg.zone();
+                this[`player_${player.id}_families_zone`].create(this, `${player.id}_families`, playerHandWidth, playerHandHeight);
+                
+                // Initialize player families stock
+                this[`player_${player.id}_families_stock`] = new ebg.stock();
+                this[`player_${player.id}_families_stock`].create(this, $(`${player.id}_families`), 30, 30);
+                this[`player_${player.id}_families_stock`].image_items_per_row = 10;
+
+                // Add three families to each player's families stock
+                for (let i = 0; i < 3; i++) {
+                    this[`player_${player.id}_families_stock`].addItemType(i, i, g_gamethemeurl+'img/30_30_meeple.png', i);
+                    this[`player_${player.id}_families_stock`].addToStockWithId(i, i);
+                }
+
+                // Initialize player stock hktokens
+                this[`player_${player.id}_hktokens`] = new ebg.stock();
+                this[`player_${player.id}_hktokens`].create(this, $(`${player.id}_families`), 30, 30);
+                this[`player_${player.id}_hktokens`].image_items_per_row = 10;
+
+                // Add one hktoken to each player's stock and to the hkzone
+                this[`player_${player.id}_hktokens`].addItemType(0, 0, g_gamethemeurl+"img/30_30_hktoken.png", 0);
+                this[`player_${player.id}_hktokens`].addToStockWithId(0, 0);
+                this.hkzone.placeInZone($(`${player.id}_families`));
             });
 
-            // Setting up player boards
+            // Setting up players' side panels
             Object.values(gamedatas.players).forEach(player => {
                 // Setting up players' side panels
                 this.getPlayerPanelElement(player.id).insertAdjacentHTML('beforeend', `
@@ -70,42 +116,6 @@ function (dojo, declare) {
                 counter.create(document.getElementById(`player_panel_${player.id}`));
                 counter.setValue(5);
             });
-
-            // Initialize hk_tokens stock
-            this.hk_tokens = new ebg.stock();
-            this.hk_tokens.create(this, $('hkboard'), 30, 30);
-            this.hk_tokens.image_items_per_row = 10;
-
-/*             // Define token types
-            for (let i = 0; i < 10; i++) {
-                this.hk_tokens.addItemType(i, i, 'img/30_30_wooden_cubes.png', i);
-            }
-
-            // Add tokens to stock and place them in the hkzone
-            for (let i = 0; i < 5; i++) {
-                this.hk_tokens.addToStockWithId(i, i);
-                const tokenDivId = this.hk_tokens.getItemDivId(i);
-                this.hkzone.placeInZone($(tokenDivId),i);
-            } */
-
-            // Initialize disaster_cards stock
-            this.disaster_cards = new ebg.stock();
-            this.disaster_cards.create(this, $('disaster-cards'), 200, 290);
-            this.disaster_cards.image_items_per_row = 5;
-
-            // Define disaster card types
-            for (let i = 0; i < 15; i++) {
-                const row = Math.floor(i / 5);
-                const col = i % 5;
-                const x = col * 200; // Each card is 200px wide
-                const y = row * 290; // Each card is 290px tall
-                this.disaster_cards.addItemType(i, i, 'img/Cards_Disaster_1000_870.png', i, x, y);
-            }
-
-            // Add three disaster cards to the stock as an example
-            for (let i = 0; i < 3; i++) {
-                this.disaster_cards.addToStockWithId(i, i);
-            }
 
             // TODO: Set up your game interface here, according to "gamedatas"
 
