@@ -38,35 +38,16 @@ function (dojo, declare) {
                 <div id="player-tables" class="zone-container"></div>
             `);
 
-            // Define dimensions for hkzone
-            const hkZoneWidth = 64; // Set to desired width
-            const hkZoneHeight = 80; // Set to desired height
-
-            // Define dimensions for atheist families zone
-            const atheistFamiliesZoneWidth = 400 - hkZoneWidth; // Set to desired width
-            const atheistFamiliesZoneHeight = 265 - hkZoneHeight; // Set to desired height
-
-            // Zone control
-            this.hkzone = new ebg.zone();
-            this.hkzone.create(this, 'hkboard', hkZoneWidth, hkZoneHeight);
-
-            // Zone for atheist families
-            this.atheistFamiliesZone = new ebg.zone();
-            this.atheistFamiliesZone.create(this, 'hkboard', atheistFamiliesZoneWidth, atheistFamiliesZoneHeight);
-            
         },
         
         setup: function(gamedatas) {
             console.log("Starting game setup");
 
-            // Define player hand dimensions
-            const playerHandWidth = 800;
-            const playerHandHeight = 200;
-
             // Create player areas
             const playerAreas = document.getElementById('player-tables');
             Object.values(gamedatas.players).forEach(player => {
                 let playerIndex = 0;
+                //get player color and set it to p_token_color[]
                 playerAreas.insertAdjacentHTML('beforeend', `
                     <div id="player_area_${player.id}" class="player_area">
                         <div class="player_name">${player.name}</div>
@@ -74,37 +55,45 @@ function (dojo, declare) {
                         <div id="${player.id}_families" class="player_families"></div>
                     </div>
                 `);
+            });
 
-                // Create zones for player cards
-                this[`player_${player.id}_cards_zone`] = new ebg.zone();
-                this[`player_${player.id}_cards_zone`].create(this, `${player.id}_cards`, playerHandWidth, playerHandHeight);
+            // Initialize meeples as a stock in each player's family div
+            Object.values(gamedatas.players).forEach(player => {
+                this[`fams_${player.id}`] = new ebg.stock();
+                this[`fams_${player.id}`].create(this, $(`${player.id}_families`), 30, 30);
+                this[`fams_${player.id}`].image_items_per_row = 10;
 
-                // Create zones for player families
-                this[`player_${player.id}_families_zone`] = new ebg.zone();
-                this[`player_${player.id}_families_zone`].create(this, `${player.id}_families`, playerHandWidth, playerHandHeight);
-                
-                // Initialize player families stock
-                this[`player_${player.id}_families_stock`] = new ebg.stock();
-                this[`player_${player.id}_families_stock`].create(this, $(`${player.id}_families`), 30, 30);
-                this[`player_${player.id}_families_stock`].image_items_per_row = 10;
-
-                // Add three families to each player's families stock
+                // Add one colored meeple to each player's families stock
+                // Make types for each color of meeple
                 for (let i = 0; i < 10; i++) {
-                    this[`player_${player.id}_families_stock`].addItemType(playerIndex, playerIndex, g_gamethemeurl+'img/30_30_meeple.png', playerIndex);
-                    this[`player_${player.id}_families_stock`].addToStockWithId(0, i);
+                    this[`fams_${player.id}`].addItemType(i, i, g_gamethemeurl + 'img/30_30_meeple.png', i);
+                    // addItemType(type: number, weight: number, image: string, image_position: number ): void
                 }
+            });
+
+            // Have to create stock in a separate loop because family divs are not defined in the first loop
+            Object.values(gamedatas.players).forEach(player => {
+                let playerIndex = 0;
+                // Add one generic meeple to each player's families stock
+                this[`fams_${player.id}`].addToStock(playerIndex);
+
+/*              // Add ten generic families to each player's families stock
+                for (let i = 0; i < 11; i++) {
+                    this[`player_${player.id}_families_stock`].addItemType(playerIndex, playerIndex, g_gamethemeurl+'img/30_30_meeple.png', playerIndex);
+                    this[`player_${player.id}_families_stock`].addToStock(0,9);
+                } */
 
                 // Initialize player stock hktokens
                 this[`player_${player.id}_hktokens`] = new ebg.stock();
-                this[`player_${player.id}_hktokens`].create(this, $(`${player.id}_families`), 30, 30);
+                this[`player_${player.id}_hktokens`].create(this, $(`hkboard`), 30, 30);
                 this[`player_${player.id}_hktokens`].image_items_per_row = 10;
 
-                // Add one hktoken to to the board for each player
-                this[`player_${player.id}_hktokens`].addItemType(0, 0, g_gamethemeurl+'img/30_30_hktoken.png', 0);
-                this[`player_${player.id}_hktokens`].addToStockWithId(0, 0);
-                this.hkzone.placeInZone($(`${player.id}_families`));
+                // Add one hktoken to the board for each player
+                this[`player_${player.id}_hktokens`].addItemType(playerIndex, playerIndex, g_gamethemeurl + 'img/30_30_hktoken.png', playerIndex);
+                this[`player_${player.id}_hktokens`].addToStockWithId(playerIndex, playerIndex);
 
-
+                // Increment counter for next player - need to replace with actual color reference some day
+                playerIndex++;
             });
 
             // Setting up players' side panels
