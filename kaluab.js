@@ -66,6 +66,7 @@ function (dojo, declare) {
             // Create player areas
             const playerAreas = document.getElementById('player-tables');
             Object.values(gamedatas.players).forEach(player => {
+                let playerIndex = 0;
                 playerAreas.insertAdjacentHTML('beforeend', `
                     <div id="player_area_${player.id}" class="player_area">
                         <div class="player_name">${player.name}</div>
@@ -88,9 +89,9 @@ function (dojo, declare) {
                 this[`player_${player.id}_families_stock`].image_items_per_row = 10;
 
                 // Add three families to each player's families stock
-                for (let i = 0; i < 3; i++) {
-                    this[`player_${player.id}_families_stock`].addItemType(i, i, g_gamethemeurl+'img/30_30_meeple.png', i);
-                    this[`player_${player.id}_families_stock`].addToStockWithId(i, i);
+                for (let i = 0; i < 10; i++) {
+                    this[`player_${player.id}_families_stock`].addItemType(playerIndex, playerIndex, g_gamethemeurl+'img/30_30_meeple.png', playerIndex);
+                    this[`player_${player.id}_families_stock`].addToStockWithId(0, i);
                 }
 
                 // Initialize player stock hktokens
@@ -98,10 +99,12 @@ function (dojo, declare) {
                 this[`player_${player.id}_hktokens`].create(this, $(`${player.id}_families`), 30, 30);
                 this[`player_${player.id}_hktokens`].image_items_per_row = 10;
 
-                // Add one hktoken to each player's stock and to the hkzone
-                this[`player_${player.id}_hktokens`].addItemType(0, 0, g_gamethemeurl+"img/30_30_hktoken.png", 0);
+                // Add one hktoken to to the board for each player
+                this[`player_${player.id}_hktokens`].addItemType(0, 0, g_gamethemeurl+'img/30_30_hktoken.png', 0);
                 this[`player_${player.id}_hktokens`].addToStockWithId(0, 0);
                 this.hkzone.placeInZone($(`${player.id}_families`));
+
+
             });
 
             // Setting up players' side panels
@@ -116,7 +119,26 @@ function (dojo, declare) {
                 counter.create(document.getElementById(`player_panel_${player.id}`));
                 counter.setValue(5);
             });
+/* 
+            // Initialize disaster_cards stock
+            this.disaster_cards = new ebg.stock();
+            this.disaster_cards.create(this, document.getElementById('disaster-cards'), 120, 174);
+            this.disaster_cards.image_items_per_row = 5;
 
+
+            // Define disaster card types
+            for (let i = 0; i < 15; i++) {
+                const row = Math.floor(i / 5);
+                const col = i % 5;
+                const x = col * 120; // Each card is 200px wide
+                const y = row * 174; // Each card is 290px tall
+                this.disaster_cards.addItemType(i, i, g_gamethemeurl+'img/Cards_Disaster_600_522.png', i, x, y);
+            }
+            // Add three disaster cards to the stock as an example
+            for (let i = 0; i < 3; i++) {
+                this.disaster_cards.addToStockWithId(i, i);
+            }
+ */
             // TODO: Set up your game interface here, according to "gamedatas"
 
             // Setup game notifications to handle (see "setupNotifications" method below)

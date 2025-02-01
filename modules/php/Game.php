@@ -312,7 +312,9 @@ class Game extends \Table
             array( 'type' => 2, 'type_arg' => 14, 'nbr' => 1 ),
             array( 'type' => 2, 'type_arg' => 15, 'nbr' => 1 )
         );
-        $this->disasterCards->createCards( $disasterCards, 'd_deck' );
+        $this->disasterCards = self::getNew("module.common.deck");
+        $this->disasterCards->init("disaster_card");
+        $this->disasterCards->createCards($disasterCards, 'deck');
     
         $bonusCards = array(
             array( 'type' => 1, 'type_arg' => 1, 'nbr' => 3 ),
@@ -322,7 +324,9 @@ class Game extends \Table
             array( 'type' => 1, 'type_arg' => 5, 'nbr' => 3 ),
             array( 'type' => 1, 'type_arg' => 6, 'nbr' => 3 )
         );
-        $this->bonusCards->createCards( $bonusCards, 'b_deck' );
+        $this->bonusCards = self::getNew("module.common.deck");
+        $this->bonusCards->init("bonus_card");
+        $this->bonusCards->createCards($bonusCards, 'deck');
 
         // Init game statistics.
         // NOTE: statistics used in this file must be defined in your `stats.inc.php` file.

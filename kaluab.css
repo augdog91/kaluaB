@@ -67,11 +67,6 @@
     display: inline-block;
 }
 
-.player_name {
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
 .player_hand {
     min-height: 100px;
     min-width: 600px;
@@ -83,8 +78,13 @@
     display: block;
 }
 
+.player_name {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
 .player_families {
-    min-height: 100px;
+    min-height: 40px;
     min-width: 600px;
     background-color: #fff;
     border: 1px solid #ddd;
@@ -94,11 +94,57 @@
     display: block;
 }
 
+.player_cards {
+    min-height: 100px;
+    width: auto;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 5px;
+    box-sizing: border-box; /* Ensure padding and border are included in the height */
+    display: block;
+}
+
+.zone {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    box-sizing: border-box; /* Ensure padding and border are included in the dimensions */
+}
+
 .family_item {
     width: 30px;
     height: 30px;
     background-image: url('img/30_30_meeple.png');
     background-size: 30px 30px;
     background-repeat: no-repeat;
+    opacity: 1; /* Ensure opacity is set to 1 */
 }
+
+.hk_token {
+    width: 30px;
+    height: 30px;
+    background-image: url('img/30_30_hktoken.png');
+    background-size: 30px 30px;
+    background-repeat: no-repeat;
+    opacity: 1; /* Ensure opacity is set to 1 */
+}
+
+#stock_item {
+    opacity: 1; /* Ensure opacity is set to 1 */
+}
+
+/* Styles for card decks */
+.deck {
+    width: 120px; /* Width of each card */
+    height: 174px; /* Height of each card */
+    background-size: cover;
+    border: 1px solid #000;
+    border-radius: 5px;
+    margin: 5px;
+    display: inline-block;
+}
+
 
