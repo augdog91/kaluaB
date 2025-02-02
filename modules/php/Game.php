@@ -58,10 +58,14 @@ class Game extends \Table
         //Make two decks: bonus and disaster
         $this->disasterCards = $this->getNew( "module.common.deck" );
         $this->disasterCards ->init( "disaster_card" );
-        $this->bonusCards = $this->getNew( "module.common.deck" );
-        $this->bonusCards ->init( "bonus_card" );
+        //$this->bonusCards = $this->getNew( "module.common.deck" );
+        //$this->bonusCards ->init( "bonus_card" );
+
+        //demo - Create Cards - to be removed
+        //$this->cards = $this->getNew( "module.common.deck" );
+        //$this->cards->init( "card" );
         
-        self::$CARD_TYPES = [
+/*         self::$CARD_TYPES = [
             1 => [
                 "card_name" => clienttranslate('Troll'), // ...
             ],
@@ -69,7 +73,7 @@ class Game extends \Table
                 "card_name" => clienttranslate('Goblin'), // ...
             ],
             // ...
-        ];
+        ]; */
     }
 
     /**
@@ -312,11 +316,9 @@ class Game extends \Table
             array( 'type' => 2, 'type_arg' => 14, 'nbr' => 1 ),
             array( 'type' => 2, 'type_arg' => 15, 'nbr' => 1 )
         );
-        $this->disasterCards = self::getNew("module.common.deck");
-        $this->disasterCards->init("disaster_card");
         $this->disasterCards->createCards($disasterCards, 'deck');
     
-        $bonusCards = array(
+/*         $bonusCards = array(
             array( 'type' => 1, 'type_arg' => 1, 'nbr' => 3 ),
             array( 'type' => 1, 'type_arg' => 2, 'nbr' => 3 ),
             array( 'type' => 1, 'type_arg' => 3, 'nbr' => 3 ),
@@ -326,7 +328,17 @@ class Game extends \Table
         );
         $this->bonusCards = self::getNew("module.common.deck");
         $this->bonusCards->init("bonus_card");
-        $this->bonusCards->createCards($bonusCards, 'deck');
+        $this->bonusCards->createCards($bonusCards, 'deck'); */
+
+        //Demo - Create Cards - to be removed
+/*         $cards = [];
+        foreach (COLORS as $color_id => $color) // spade, heart, diamond, club
+            for ($value = 2; $value <= 14; $value++) // 2, 3, 4, ... K, A
+                if (!in_array($color_id * 100 + $value, $remove_code)) // Cards to be excluded
+                    $cards[] = ['type' => $color_id, 'type_arg' => $value, 'nbr' => 1];
+
+        $this->cards->createCards($cards, 'deck'); */
+
 
         // Init game statistics.
         // NOTE: statistics used in this file must be defined in your `stats.inc.php` file.

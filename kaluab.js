@@ -33,7 +33,7 @@ function (dojo, declare) {
             document.getElementById('game_play_area').insertAdjacentHTML('beforeend', `
                 <div id="board_background">
                     <div id="hkboard"></div>
-                    <div id="atheistFamiliesZone"></div>
+                    <div id="atheistFamilies"></div>
                 </div>
                 <div id="player-tables" class="zone-container"></div>
             `);
@@ -45,8 +45,8 @@ function (dojo, declare) {
 
             // Create player areas
             const playerAreas = document.getElementById('player-tables');
+            let playerIndex = 0;
             Object.values(gamedatas.players).forEach(player => {
-                let playerIndex = 0;
                 //get player color and set it to p_token_color[]
                 playerAreas.insertAdjacentHTML('beforeend', `
                     <div id="player_area_${player.id}" class="player_area">
@@ -63,38 +63,54 @@ function (dojo, declare) {
                 this[`fams_${player.id}`].create(this, $(`${player.id}_families`), 30, 30);
                 this[`fams_${player.id}`].image_items_per_row = 10;
 
-                // Add one colored meeple to each player's families stock
                 // Make types for each color of meeple
                 for (let i = 0; i < 10; i++) {
                     this[`fams_${player.id}`].addItemType(i, i, g_gamethemeurl + 'img/30_30_meeple.png', i);
                     // addItemType(type: number, weight: number, image: string, image_position: number ): void
                 }
-            });
 
-            // Have to create stock in a separate loop because family divs are not defined in the first loop
-            Object.values(gamedatas.players).forEach(player => {
-                let playerIndex = 0;
-                // Add one generic meeple to each player's families stock
+                // Add one player colored (chief) meeple to each player's families stock
                 this[`fams_${player.id}`].addToStock(playerIndex);
 
-/*              // Add ten generic families to each player's families stock
+                // Add ten generic families to each player's families stock
                 for (let i = 0; i < 11; i++) {
-                    this[`player_${player.id}_families_stock`].addItemType(playerIndex, playerIndex, g_gamethemeurl+'img/30_30_meeple.png', playerIndex);
-                    this[`player_${player.id}_families_stock`].addToStock(0,9);
-                } */
+                    this[`fams_${player.id}`].addItemType(playerIndex, playerIndex, g_gamethemeurl+'img/30_30_meeple.png', playerIndex);
+                    this[`fams_${player.id}`].addToStock(8);
+                }
 
-                // Initialize player stock hktokens
+/*                 // Initialize player stock hktokens
                 this[`player_${player.id}_hktokens`] = new ebg.stock();
                 this[`player_${player.id}_hktokens`].create(this, $(`hkboard`), 30, 30);
                 this[`player_${player.id}_hktokens`].image_items_per_row = 10;
 
-                // Add one hktoken to the board for each player
-                this[`player_${player.id}_hktokens`].addItemType(playerIndex, playerIndex, g_gamethemeurl + 'img/30_30_hktoken.png', playerIndex);
-                this[`player_${player.id}_hktokens`].addToStockWithId(playerIndex, playerIndex);
+                // Make types for each color of token
+                for (let i = 0; i < 12; i++) {
+                    this[`player_${player.id}_hktokens`].addItemType(i, i, g_gamethemeurl + 'img/30_30_hktoken.png', i);
+                    // addItemType(type: number, weight: number, image: string, image_position: number ): void
+                }
 
+                // Add one hktoken to the board for each player
+                //might need to use addToStockWithId instead for easy token moving
+                this[`player_${player.id}_hktokens`].addToStock(playerIndex);
+ */
                 // Increment counter for next player - need to replace with actual color reference some day
                 playerIndex++;
+
             });
+
+            //Initialize and create atheist families stock
+            this['atheists'] = new ebg.stock();
+            this['atheists'].create(this, document.getElementById('atheistFamilies'), 30, 30);
+            this['atheists'].setSelectionMode(0)
+            this['atheists'].image_items_per_row = 10;
+            for (let i = 0; i < 10; i++) {
+                this[`atheists`].addItemType(i, i, g_gamethemeurl + 'img/30_30_meeple.png', i);
+            }
+
+            // Add three atheist families to hkboard for each player
+            for (let i = 1; i < 15; i++) {
+                this['atheists'].addToStock(8);
+            }
 
             // Setting up players' side panels
             Object.values(gamedatas.players).forEach(player => {
@@ -108,6 +124,55 @@ function (dojo, declare) {
                 counter.create(document.getElementById(`player_panel_${player.id}`));
                 counter.setValue(5);
             });
+
+            // Initialize player hands
+            Object.values(gamedatas.players).forEach(player => {
+                this[`playerHand_${player.id}`] = new ebg.stock();
+                this[`playerHand_${player.id}`].create(this, $(`${player.id}_cards`), 120, 174);
+                this[`playerHand_${player.id}`].centerItems = true;
+                this[`playerHand_${player.id}`].image_items_per_row = 5;
+                this[`playerHand_${player.id}`].apparenceBorderWidth = '2px'; // Change border width when selected
+                this[`playerHand_${player.id}`].setSelectionMode(1); // Select only a single card
+                this[`playerHand_${player.id}`].horizontal_overlap = 28;
+                this[`playerHand_${player.id}`].item_margin = 0;
+
+                //dojo.connect(this[`playerHand_${player.id}`], 'onChangeSelection', this, 'onHandCardSelect');
+
+                // Create card types
+                for (let color = 1; color <= 3; color++) {
+                    for (let value = 1; value <= 5; value++) {
+                        // Build card type id
+                        const card_type_id = this.getCardUniqueId(color, value);
+                        // Change card image style according to the preference option
+                        this[`playerHand_${player.id}`].addItemType(card_type_id, card_type_id, g_gamethemeurl + 'img/Cards_Disaster_600_522.png', card_type_id);
+                    }
+                }
+            });
+
+            // Add three cards to each player's hand
+            Object.values(gamedatas.players).forEach(player => {
+                for (let i = 1; i <= 3; i++) {
+                    const card_type_id = this.getCardUniqueId(Math.floor(Math.random() * 3) + 1, Math.floor(Math.random() * 5) + 1); // Example card type id
+                    this[`playerHand_${player.id}`].addToStock(card_type_id);
+                }
+            });
+
+/*             // Cards in player's hand
+            for (let i in gamedatas.hand) {
+                const card = gamedatas.hand[i];
+                const color = card.type;
+                const value = card.type_arg;
+                this.playerHand.addToStockWithId(this.getCardUniqueId(color, value), card.id);
+            }
+            
+            // Cards played on table
+            for (let i in gamedatas.cardsontable) {
+                const card = gamedatas.cardsontable[i];
+                const color = card.type;
+                const value = card.type_arg;
+                const player_id = card.location_arg;
+                this.addTableCard(value, color, player_id, player_id);
+            } */
 /* 
             // Initialize disaster_cards stock
             this.disaster_cards = new ebg.stock();
@@ -206,6 +271,11 @@ function (dojo, declare) {
             Here, you can define some utility methods that you can use everywhere in your javascript
             script.
         */
+
+        // Get card unique identifier based on its color and value
+        getCardUniqueId: function (color, value) {
+            return (color - 1) * 13 + (value - 2);
+        },
 
         ///////////////////////////////////////////////////
         //// Player's action

@@ -88,8 +88,7 @@ $machinestates = [
     ],
 
 /*  From Game.php _Construct
-    "Update_Count" => 10,
-    "Active_Draw" => 11,
+    "Draw" => 10,
     "Free_Action" => 20,
     "Active_Turn" => 30,
     "Non-active_Turn" => 31,
@@ -105,19 +104,9 @@ $machinestates = [
 
 /* 
 10 => [
-    "name" => "Update_Count",
-    "description" => '',
-    "type" => "game",
-    "action" => "",
-    "args" => "",
-    "possibleactions" => "",
-    "updateGameProgression" => false,
-    "transitions" => ["???" => 0, "???" => 0]
-],
-11 => [
-    "name" => "Active_Draw",
-    "description" => 'Draw a total of five cards.',
-    "type" => "",
+    "name" => "Draw",
+    "description" => clienttranslate('${actplayer} must select five cards to draw'),
+    "type" => "multipleactiveplayer",
     "action" => "",
     "args" => "",
     "possibleactions" => "",
